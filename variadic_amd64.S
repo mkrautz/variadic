@@ -6,6 +6,10 @@
 
 .globl _VariadicCall
 _VariadicCall:
+.globl _VariadicCallFloat
+_VariadicCallFloat:
+.globl _VariadicCallDouble
+_VariadicCallDouble:
 	pushq %rbp
 	movq  %rsp, %rbp
 

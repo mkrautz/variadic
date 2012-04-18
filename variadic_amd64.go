@@ -8,6 +8,8 @@ package variadic
 #include <dlfcn.h>
 
 void *VariadicCall(void *ctx);
+float VariadicCallFloat(void *ctx);
+double VariadicCallDouble(void *ctx);
 
 void *LookupSymAddr(char *str) {
 	return dlsym(RTLD_DEFAULT, str);
@@ -62,4 +64,16 @@ func NewFunctionCallAddr(addr unsafe.Pointer) *FunctionCall {
 // its return value as an uintptr.
 func (f *FunctionCall) Call() uintptr {
 	return uintptr(C.VariadicCall(unsafe.Pointer(f)))
+}
+
+// CallFloat32 calls the FunctionCall's underlying function, returning
+// its return value as a float32.
+func (f *FunctionCall) CallFloat32() float32 {
+	return float32(C.VariadicCallFloat(unsafe.Pointer(f)))
+}
+
+// CallFloat64 calls the FunctionCall's underlying function, returning
+// its return value as float64.
+func (f *FunctionCall) CallFloat64() float64 {
+	return float64(C.VariadicCallDouble(unsafe.Pointer(f)))
 }
