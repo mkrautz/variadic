@@ -3,7 +3,7 @@ Package variadic
 
 This packge implements variadic calling conventions for calling foreign C code from within Go.
 
-The primary motivation for this library was to be able to interface with Apple's Objective-C
+The primary motivation for this package was to be able to interface with Apple's Objective-C
 runtime on Mac OS X, which uses a variadic function (objc_msgSend) for sending messages to objects.
 
 Status
@@ -15,7 +15,7 @@ amd64:  Works pretty well - http://github.com/mkrautz/objc uses it (only tested 
 
         Note: darwin/386 requires 16 byte stack alignment, and no
         effort has been made to support this at the moment. However,
-	the tests passes on darwin/386.
+        the tests pass on darwin/386 - not sure if I've been lucky.
 
-	Missing feautures: Float point arguments do not work on 386,
-	but float point return values work fine.
+        Missing feautures: Float point arguments do not work on 386,
+        but floating point return values work fine.
