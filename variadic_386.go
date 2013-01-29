@@ -15,7 +15,11 @@ float VariadicCallFloat(void *ctx);
 double VariadicCallDouble(void *ctx);
 
 void *LookupSymAddr(char *str) {
+#ifdef RTLD_DEFAULT
+	return dlsym(RTLD_DEFAULT, str);
+#else
 	return dlsym(NULL, str);
+#endif
 }
 */
 import "C"
@@ -51,6 +55,9 @@ func (f *FunctionCall) Call() uintptr {
 	if f.NumArgs > len(f.Words) {
 		panic("bad NumArgs")
 	}
+	if f.addr == nil {
+		panic("variadic: Call called with nil function addr")
+	}
 	return uintptr(C.VariadicCall(unsafe.Pointer(f)))
 }
 
@@ -60,6 +67,9 @@ func (f *FunctionCall) CallFloat32() float32 {
 	if f.NumArgs > len(f.Words) {
 		panic("bad NumArgs")
 	}
+	if f.addr == nil {
+		panic("variadic: CallFloat32 called with nil function addr")
+	}
 	return float32(C.VariadicCallFloat(unsafe.Pointer(f)))
 }
 
@@ -68,6 +78,9 @@ func (f *FunctionCall) CallFloat32() float32 {
 func (f *FunctionCall) CallFloat64() float64 {
 	if f.NumArgs > len(f.Words) {
 		panic("bad NumArgs")
+	}
+	if f.addr == nil {
+		panic("variadic: CallFloat64 called with nil function addr")
 	}
 	return float64(C.VariadicCallDouble(unsafe.Pointer(f)))
 }
