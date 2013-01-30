@@ -87,8 +87,6 @@ func TestPrintf(t *testing.T) {
 }
 
 func TestFloatPrintf(t *testing.T) {
-	return // skip for now
-
 	buf := make([]byte, 256)
 	fmt := "%.6f %i\n\x00"
 	fc := NewFunctionCall("sprintf")
@@ -96,9 +94,11 @@ func TestFloatPrintf(t *testing.T) {
 	strhdr := (*reflect.StringHeader)(unsafe.Pointer(&fmt))
 	fc.Words[0] = slicehdr.Data
 	fc.Words[1] = strhdr.Data
-	fc.Words[2] = uintptr(math.Float32bits(3.141592))
-	fc.Words[3] = 2
-	fc.NumArgs = 3
+	u64 := math.Float64bits(3.141592)
+	fc.Words[2] = uintptr(u64 & 0xffffffff)
+	fc.Words[3] = uintptr((u64 >> 32) & 0xffffffff)
+	fc.Words[4] = 2
+	fc.NumArgs = 5
 	n := fc.Call()
 	if n > 256 {
 		t.Fatal("bad return value from sprintf")
