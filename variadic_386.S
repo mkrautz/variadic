@@ -20,6 +20,12 @@ name(VariadicCallDouble):
 	movl  %esp, %ebp
 
 	movl  8(%esp), %eax
+
+	// Align the stack to a 16-byte boundary
+	movl %esp, %ecx
+	andl $0xfffffff0, %ecx
+	movl %ecx, %esp
+
 	movl  REGS_NARGS(%eax), %ecx
 
 	cmpl  $0, %ecx

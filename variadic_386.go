@@ -52,9 +52,16 @@ func NewFunctionCallAddr(addr unsafe.Pointer) *FunctionCall {
 // Call calls the FunctionCall's underlying function, returning
 // its return value as an uintptr.
 func (f *FunctionCall) Call() uintptr {
+	// Ensure stack is 16 byte aligned.
+	rem := (f.NumArgs % 4)
+	if rem > 0 {
+		f.NumArgs = f.NumArgs + (4 - rem)
+	}
+
 	if f.NumArgs > len(f.Words) {
 		panic("bad NumArgs")
 	}
+	
 	if f.addr == nil {
 		panic("variadic: Call called with nil function addr")
 	}
